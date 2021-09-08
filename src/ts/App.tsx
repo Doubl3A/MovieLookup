@@ -1,9 +1,10 @@
 import React from 'react';
+import { MovieLookup } from './MovieLookup';
 
 function App() {
   return (
-    <div>
-
+    <div id={"app"}>
+      <MovieLookup />
     </div>
   );
 }
