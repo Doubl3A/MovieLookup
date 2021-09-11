@@ -1,0 +1,267 @@
+const defaultSearch :string = "";
+const defaultFilter :Filter = {
+    type: "",
+    year: "",
+    listLength: 0
+};
+const defaultMovieID :MovieID[]= [];
+const defaultMovies :Movie[] = [];
+
+
+const [search, setSearch] = useState(defaultSearch);
+    const [filter, setFilter] = useState(defaultFilter);
+    const [searchResult, setSearchResult] = useState( defaultMovieID );
+    const [movieList, setMovieList] = useState( defaultMovies );
+
+    if(props.search !== search){
+        setSearch(props.search);
+    }
+    if(props.filter !== filter){
+        setFilter(props.filter);
+    }
+
+    useEffect(() => {
+        console.log("1------------------------");
+
+        setSearchResult(searchAndRespond(search, filter));
+        console.log("1------------------------");
+        console.log(searchResult);
+        }, [search, filter]);
+
+    useEffect(() => {
+        if(searchResult.length >= 1){
+            console.log("2------------------------");
+
+            setMovieList(getMovieDetails(searchResult));
+        }
+    }, [searchResult]);
+
+    useEffect(() => {
+        if(searchResult.length >= 1){
+            console.log("3------------------------");
+            console.log(movieList);
+            console.log("3------------------------");
+
+        }
+    }, [ movieList ]);
+
+    return(
+      <div id={"movieList"}>
+
+      </div>
+    );
+    let list :any;
+    if(movieList === []){
+        list = (
+            <div id={"movieList"}>
+                <p>Loading.....</p>
+            </div>
+        );
+    }else{
+        list = (
+            <div id={"movieList"}>
+                <p>Loaded!</p>
+            </div>
+        );
+    }
+
+    console.log("!")
+    return list;
+
+
+
+
+
+
+
+
+    let i :number= 0;
+                        while(i < results.length){
+                            const result = results[i];
+                            //console.log("id " + result.imdbID);
+                            const movieID :MovieID = {
+                                imdbID:result.imdbID
+                            };
+                            movies.push(movieID);
+                            i++;
+                        }
+
+                        setSearchResult(movies);
+                        setIsLoaded( prev => prev + 1);
+
+
+
+
+    export function searchAndRespond(search :string, filter :Filter){
+        const iterations = filter.listLength/10;
+        let movies :any[] = [];
+        let i = 1;
+        while(i <= iterations){
+            const page :string= "&page="+i;
+            const movieReq = new Request(
+                "http://www.omdbapi.com/?apikey=88fcaf73&s=how%20to%20train%20your%20dragon" + "&page=" + i,
+                {method: 'GET'});
+
+            fetch(movieReq)
+                .then( res => res.json())
+                .then( data => {
+                    let results :any[] = data.Search;
+
+                    results.forEach( id => {
+                        console.log("id " + id);
+                        const movie :MovieID = {
+                            imdbID: id
+                        };
+                        movies.push(movie);
+                    })
+                });
+            i++;
+        }
+        console.log("return");
+        return movies;
+    }
+
+    export function getMovieDetails(movieIDs :MovieID[]){
+        let movies :any[] = [];
+        let i = 1;
+        while(i <= movieIDs.length){
+            const link = defaultLink
+                + "&i="+movieIDs[i];
+
+            const movieReq = new Request(
+                link,
+                {method: 'GET'});
+
+            fetch(movieReq)
+                .then(response => {
+                    return response.json();
+                }).then((data: any) => {
+                    let result :any = data;
+                    //console.log("nr: " + i + " " +result.Title);
+                    const movie :Movie = {
+                        poster: result.Poster,
+                        title: result.Title,
+                        genre: result.Genre,
+                        rating: result.imdbRating,
+                        runtime: result.Runtime,
+                        rated: result.Rated,
+                        year: result.Year,
+                        boxOffice: result.BoxOffice
+                    };
+                    movies.push(movie);
+            });
+
+            i++;
+        }
+        return movies;
+    }
+
+
+    import React, {useEffect, useState} from 'react';
+    import {Movie, MovieID} from "./Interface/MovieInterface";
+    import {Filter} from "./Interface/FilterInterface";
+    import {searchForMovies} from "./Components/SearchComponent";
+
+    const defaultSearch :string = "";
+    const defaultFilter :Filter = {
+        type: "",
+        year: "",
+        listLength: 20
+    };
+    const defaultMovieID :MovieID[]= [];
+    const defaultMovies :Movie[] = [];
+    const defaultIsLoaded :number = 0;
+
+    export function MovieList(props :any){
+        const [search, setSearch] = useState(defaultSearch);
+        const [filter, setFilter] = useState(defaultFilter);
+        const [searchResult, setSearchResult] = useState( defaultMovieID );
+        const [movieList, setMovieList] = useState( defaultMovies );
+
+
+        const [error, setError] = useState(null);
+        const [isLoaded, setIsLoaded] = useState(defaultIsLoaded);
+
+        useEffect(() => {
+            setMovieList(searchForMovies(search, filter));
+        }, [search, filter]);
+
+        if(error){
+            return <div>Error: {error}</div>;
+        }else if(isLoaded === filter.listLength/10){
+            console.log("not loaded");
+            console.log(isLoaded);
+            return <div>Loading....</div>
+        }else{
+            console.log("loaded");
+            console.log(searchResult);
+            return <div>Loaded!</div>
+        }
+    }
+
+    const defaultLink = "http://www.omdbapi.com/?apikey=88fcaf73";
+    function getUrl(search :string, filter: Filter){
+        const link = defaultLink
+            + "&s="+search
+            + "&type="+filter.type
+            + "&year="+filter.year;
+        return link;
+    }
+
+
+
+    export function searchForMovies(search :string, filter :Filter){
+        const iterations = filter.listLength/10;
+        let totalResults :number = -1;
+        let movies :Movie[] = [];
+        let i = 1;
+        while(i <= iterations){
+            const page :string= "&page="+i;
+            const movieReq = new Request(
+                "http://www.omdbapi.com/?apikey=88fcaf73&s=how%20to%20train%20your%20dragon" + "&page=" + i,
+                {method: 'GET'});
+
+            fetch(movieReq)
+                .then( res => res.json())
+                .then( data => {
+                    let results :any[] = data.Search;
+
+                    if(totalResults === -1){
+                        totalResults = Number(data.totalResults);
+                    }
+
+                    results.forEach( id => {
+                        const link = defaultLink
+                            + "&i="+id.imdbID;
+                        const movieReq = new Request(
+                            link,
+                            {method: 'GET'});
+
+                        fetch(movieReq)
+                            .then(response => {
+                                return response.json();
+                            }).then((data: any) => {
+                                let result :any = data;
+                                let movie :Movie = {
+                                    poster: result.Poster,
+                                    title: result.Title,
+                                    genre: result.Genre,
+                                    rating: result.imdbRating,
+                                    runtime: result.Runtime,
+                                    rated: result.Rated,
+                                    year: result.Year,
+                                    boxOffice: result.BoxOffice
+                                };
+                                movies.push(movie);
+                            });
+                    })
+                });
+            if((totalResults - i*10) < filter.listLength){
+                console.log(movies);
+                return movies;
+            }else{
+                i++;
+            }
+        }
+        return movies;
+    }
