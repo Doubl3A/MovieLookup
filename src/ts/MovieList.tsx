@@ -1,20 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Movie, MovieID} from "./Interface/MovieInterface";
-import {Filter} from "./Interface/FilterInterface";
-import {getMovieDetails, searchForMovies} from "./Components/SearchComponent";
+import {Movie} from "./Interface/MovieInterface";
 
-const defaultLink = "http://www.omdbapi.com/?apikey=88fcaf73";
-const defaultSearch :string = "";
-const defaultFilter :Filter = {
-    type: "",
-    year: "",
-    listLength: 0
-};
+const apiKey :string = "88fcaf73";
+
+//const testLink :string = "http://www.omdbapi.com/?apikey=88fcaf73&s=how%20to%20train%20your%20dragon";
+const defaultLink :string = "http://www.omdbapi.com/?apikey=";
+
 const defaultMovieID :string[]= [];
 const defaultMovies :Movie[] = [];
 const defaultIteration :number = 0;
 
-function getIterations(totalResponse: any, iterations: number) {
+function getIterations(totalResponse: any, iterations :number) {
     let allowedIterations :number = 1;
 
     const allowed = totalResponse/10;
@@ -28,104 +24,109 @@ function getIterations(totalResponse: any, iterations: number) {
         allowedIterations = iterations
     }
 
-    return allowedIterations;
+    return Math.trunc(allowedIterations);
 }
 
 export function MovieList(props :any) {
-    const [search, setSearch] = useState(defaultSearch);
-    const [filter, setFilter] = useState(defaultFilter);
     const [searchResult, setSearchResult] = useState(defaultMovieID);
     const [movieList, setMovieList] = useState(defaultMovies);
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [iterations, setIterations] = useState(defaultIteration);
 
-    if (props.search !== search) {
-        setSearch(props.search);
-    }
-    if (props.filter !== filter) {
-        setFilter(props.filter);
-    }
+    // useEffect( () => {
+    //     setIsLoaded(false);
+    //     setSearchResult([]);
+    //
+    //     setIterations(-1)
+    // }, [search, filter])
 
     useEffect(() => {
-        setIsLoaded(false);
-        setSearchResult([]);
+        if(props.search === undefined || props.search !== ""){
+            const iteration = props.filter.listLength/10;
+            let allowedIterations :number = iteration;
+            setIterations(allowedIterations);
 
-        const iteration = filter.listLength/10;
-        let allowedIterations :number = iteration;
+            setIsLoaded(false);
+            setSearchResult([]);
+            setMovieList([]);
 
-        let i = 1;
-        while(i <= allowedIterations){
-            let movies :string[] = [];
-            const page :string= "&page="+i;
-            const movieReq = new Request(
-                "http://www.omdbapi.com/?apikey=88fcaf73&s=how%20to%20train%20your%20dragon" + page,
-                {method: 'GET'});
+            let i = 1;
+            while(i <= allowedIterations){
+                let movies :string[] = [];
+                const link :string = defaultLink
+                    + apiKey
+                    + "&s="+props.search
+                    + "&type="+props.filter.type
+                    + "&y="+props.filter.year
+                    + "&page="+i
+                    + "&r=json";
 
-            fetch(movieReq)
-                .then( res => res.json())
-                .then( data => {
-                    // if(allowedIterations === 1) {
-                    //     allowedIterations = getIterations(data.totalResponse, iterations);
-                    //     console.log("Iterations: " + allowedIterations);
-                    // }
-                    let results :any[] = data.Search;
+                const movieReq = new Request(
+                    link,
+                    {method: 'GET'});
+                fetch(movieReq)
+                    .then( res => res.json())
+                    .then( data => {
+                        setIterations(prev => prev - 1);
+                        console.log(data.Search);
+                        let results :any[] = data.Search;
 
-                    results.forEach( result => {
-                        movies.push(result.imdbID);
+                        results.forEach( result => {
+                            movies.push(result.imdbID);
+                        });
+
+                        setSearchResult( prev => prev.concat(movies));
                     });
-
-                    setSearchResult( prev => prev.concat(movies));
-                });
-            i++;
+                i++;
+            }
         }
-
-    }, [search, filter]);
+    }, [props.search, props.filter]);
 
     useEffect(() => {
-        console.log(searchResult);
         //console.log("search: " + searchResult.toString());
+        if(iterations === 0){
+            let movies :Movie[] = [];
+            let i = 0;
+            while(i <= searchResult.length){
+                const id :string = searchResult[i];
+                const link = defaultLink
+                    + apiKey
+                    + "&i="+id;
 
-        let movies :Movie[] = [];
-        let i = 0;
-        while(i <= searchResult.length){
-            const id :string = searchResult[i];
-            const link = defaultLink
-                + "&i="+id;
+                console.log(id) ;
+                const movieReq = new Request(
+                    link,
+                    {method: 'GET'});
 
-            console.log(id) ;
-            const movieReq = new Request(
-                link,
-                {method: 'GET'});
+                fetch(movieReq)
+                    .then(response => {
+                        return response.json();
+                    }).then((data: any) => {
+                    let result :any = data;
+                    //console.log("nr: " + i + " " +result.Title);
+                    const movie :Movie = {
+                        poster: result.Poster,
+                        title: result.Title,
+                        genre: result.Genre,
+                        rating: result.imdbRating,
+                        runtime: result.Runtime,
+                        rated: result.Rated,
+                        year: result.Year,
+                        boxOffice: result.BoxOffice
+                    };
+                    movies.push(movie);
 
-            fetch(movieReq)
-                .then(response => {
-                    return response.json();
-                }).then((data: any) => {
-                let result :any = data;
-                //console.log("nr: " + i + " " +result.Title);
-                const movie :Movie = {
-                    poster: result.Poster,
-                    title: result.Title,
-                    genre: result.Genre,
-                    rating: result.imdbRating,
-                    runtime: result.Runtime,
-                    rated: result.Rated,
-                    year: result.Year,
-                    boxOffice: result.BoxOffice
-                };
-                movies.push(movie);
+                    setMovieList( prev => prev.concat(movie));
+                });
 
-                setMovieList( prev => prev.concat(movie));
-            });
-
-            i++;
+                i++;
+            }
         }
-
     }, [searchResult]);
 
     useEffect(() => {
-        console.log(movieList);
+        //console.log(movieList);
         setIsLoaded(true)
 
     }, [movieList]);
@@ -135,7 +136,7 @@ export function MovieList(props :any) {
         const table :any = movieList.map( movie => {
             return (
                 <tr>
-                    <td><img src={movie.poster}/></td>
+                    <td><img src={movie.poster} alt={"no poster"}/></td>
                     <td>{movie.title}</td>
                     <td>{movie.genre}</td>
                     <td>{movie.rating}</td>
