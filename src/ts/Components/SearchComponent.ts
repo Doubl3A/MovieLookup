@@ -1,43 +1,56 @@
 import {Filter} from "../Interface/FilterInterface";
 import {Movie, MovieID} from "../Interface/MovieInterface";
 
-const defaultLink = "http://www.omdbapi.com/?apikey=88fcaf73";
+const apiKey :string = "88fcaf73";
+const defaultLink :string = "http://www.omdbapi.com/?apikey=";
 
-export function searchForMovies(search :string, filter :Filter){
-    const iterations = filter.listLength/10;
-    let movies :any[] = [];
+// retrieves movieIDs from given search and filters
+// using setSearchResult to save results
+// using setIterations to keep track how many iterations have been tracked
+export function searchForMovies(search :string, filter :Filter, setSearchResult :any, setIterations :any){
+    let allowedIterations :number = filter.listLength/10;
+
     let i = 1;
-    while(i <= iterations){
-        const page :string= "&page="+i;
-        const movieReq = new Request(
-            "http://www.omdbapi.com/?apikey=88fcaf73&s=how%20to%20train%20your%20dragon" + page,
-            {method: 'GET'});
+    while(i <= allowedIterations){
+        let movies :string[] = [];
+        const link :string = defaultLink
+            + apiKey
+            + "&s="+search
+            + "&type="+filter.type
+            + "&y="+filter.year
+            + "&page="+i
+            + "&r=json";
 
+        const movieReq = new Request(
+            link,
+            {method: 'GET'});
         fetch(movieReq)
             .then( res => res.json())
             .then( data => {
-                let results :any[] = data.Search;
+                if(data.Response === "True"){
+                    let results :any[] = data.Search;
 
-                results.forEach( id => {
-                    console.log("id " + id);
-                    const movie :MovieID = {
-                        imdbID: id.imdbID
-                    };
-                    movies.push(movie);
-                });
-                return movies;
+                    results.forEach( result => {
+                        movies.push(result.imdbID);
+                    });
+
+                    setSearchResult( (prev :any) => prev.concat(movies));
+                }
+
+                setIterations((prev :any) => prev - 1);
             });
         i++;
     }
-    return movies;
 }
 
-export function getMovieDetails(movieIDs :MovieID[]){
-    let movies :Movie[] = [];
-    let i = 1;
-    while(i <= movieIDs.length){
+// retrieves movie details for each movieID
+// using setMovieList to save results
+export function getMovieDetails(movieIDs :string[], setMovieList :any){
+    movieIDs.forEach( movieID =>{
         const link = defaultLink
-            + "&i="+movieIDs[i];
+            + apiKey
+            + "&i="+movieID
+            + "&plot=full";
 
         const movieReq = new Request(
             link,
@@ -48,7 +61,6 @@ export function getMovieDetails(movieIDs :MovieID[]){
                 return response.json();
             }).then((data: any) => {
             let result :any = data;
-            //console.log("nr: " + i + " " +result.Title);
             const movie :Movie = {
                 poster: result.Poster,
                 title: result.Title,
@@ -58,53 +70,9 @@ export function getMovieDetails(movieIDs :MovieID[]){
                 rated: result.Rated,
                 year: result.Year,
                 boxOffice: result.BoxOffice,
-                plot: result.Plot
+                plot: result.Plot,
             };
-            movies.push(movie);
-
-            return movies;
+            setMovieList( (prev :any) => prev.concat(movie));
         });
-
-        i++;
-    }
-    return movies;
-}
-
-
-export function searchAndRespond2(search: string, filter : Filter){
-    const iterations :number = filter.listLength / 10;
-    let movies :any[] = [];
-
-    let i = 1;
-    while(i <= iterations){
-        const link = defaultLink
-            + "&s="+search
-            + "&type="+filter.type
-            + "&year="+filter.year;
-
-        const movieReq = new Request(
-            link + "&page=" + i,
-            {method: 'GET'});
-
-        fetch(movieReq)
-            .then(response => {
-                return response.json();
-            }).then((data: any) => {
-            let results :any[] = data.Search;
-
-            let i :number= 0;
-            while(i < results.length){
-                const result = results[i];
-                //console.log("id " + result.imdbID);
-                const movieID :MovieID = {
-                    imdbID:result.imdbID
-                };
-                movies.push(movieID);
-                i++;
-            }
-        });
-
-        i++;
-    }
-    return movies;
+    });
 }
