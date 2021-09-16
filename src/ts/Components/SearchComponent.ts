@@ -57,7 +57,8 @@ export function getMovieDetails(movieIDs :MovieID[]){
                 runtime: result.Runtime,
                 rated: result.Rated,
                 year: result.Year,
-                boxOffice: result.BoxOffice
+                boxOffice: result.BoxOffice,
+                plot: result.Plot
             };
             movies.push(movie);
 

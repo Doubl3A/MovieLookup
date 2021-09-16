@@ -479,3 +479,19 @@ const [search, setSearch] = useState(defaultSearch);
     }
 
     -------------------------------------------------------------------------------------------------------------------
+
+    if(a.boxOffice === undefined || b.boxOffice === undefined){
+            if(a.boxOffice === undefined){
+                return 1;
+            }else{
+                return -1;
+            }
+        }else if(a.boxOffice === "N/A" || b.boxOffice === "N/A"){
+            if(a.boxOffice === "N/A"){
+                return 1;
+            }else{
+                return -1;
+            }
+        }
+
+        return b.boxOffice.localeCompare(a.boxOffice);

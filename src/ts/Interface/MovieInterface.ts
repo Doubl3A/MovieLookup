@@ -10,5 +10,6 @@ export interface Movie {
     runtime: string,
     rated: string,
     year: string,
-    boxOffice: string
+    boxOffice: string,
+    plot: string,
 }

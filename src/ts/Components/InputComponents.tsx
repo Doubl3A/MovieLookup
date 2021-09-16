@@ -50,7 +50,3 @@ export function InputListLength(props :any){
         </div>
     );
 }
-
-function placeHolder(){
-    console.log("placeholder");
-}

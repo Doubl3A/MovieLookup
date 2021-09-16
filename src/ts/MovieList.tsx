@@ -1,57 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import {Movie} from "./Interface/MovieInterface";
-import { createMovieTable } from "./Components/TableComponents";
-const apiKey :string = "88fcaf73";
+import {sortMovieTable} from "./Components/SortingComponents";
+import {MovieTable} from "./Components/TableComponents";
 
-//const testLink :string = "http://www.omdbapi.com/?apikey=88fcaf73&s=how%20to%20train%20your%20dragon";
+const apiKey :string = "88fcaf73";
 const defaultLink :string = "http://www.omdbapi.com/?apikey=";
 
 const defaultMovieID :string[]= [];
 const defaultMovies :Movie[] = [];
-const defaultIteration :number = 0;
-
-function getIterations(totalResponse: any, iterations :number) {
-    let allowedIterations :number = 1;
-
-    const allowed = totalResponse/10;
-    if(allowed < iterations){
-        if(allowed < allowed+1){
-            allowedIterations = allowed+1;
-        }else{
-            allowedIterations = allowed;
-        }
-    }else{
-        allowedIterations = iterations
-    }
-
-    return Math.trunc(allowedIterations);
-}
 
 export function MovieList(props :any) {
     const [searchResult, setSearchResult] = useState(defaultMovieID);
     const [movieList, setMovieList] = useState(defaultMovies);
+    const [sortId, setSortId] = useState(1);
 
     const [isLoaded, setIsLoaded] = useState(false);
-    const [iterations, setIterations] = useState(defaultIteration);
-
-    // useEffect( () => {
-    //     setIsLoaded(false);
-    //     setSearchResult([]);
-    //
-    //     setIterations(-1)
-    // }, [search, filter])
+    const [iterations, setIterations] = useState(0);
 
     useEffect(() => {
         if(props.search !== undefined || props.search !== ""){
-            console.log(props.search);
-
-            const iteration = props.filter.listLength/10;
-            let allowedIterations :number = iteration;
+            let allowedIterations :number = props.filter.listLength/10;
             setIterations(allowedIterations);
 
             setIsLoaded(false);
             setSearchResult([]);
             setMovieList([]);
+            setSortId(1);
 
             let i = 1;
             while(i <= allowedIterations){
@@ -70,8 +44,6 @@ export function MovieList(props :any) {
                 fetch(movieReq)
                     .then( res => res.json())
                     .then( data => {
-                        setIterations(prev => prev - 1);
-
                         if(data.Response === "True"){
                             let results :any[] = data.Search;
 
@@ -80,26 +52,27 @@ export function MovieList(props :any) {
                             });
 
                             setSearchResult( prev => prev.concat(movies));
-                        }else{
-                            console.log("jup " + iterations);
                         }
+
+                        setIterations(prev => prev - 1);
                     });
                 i++;
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.search, props.filter]);
 
+    //gets movie info for each movie
     useEffect(() => {
         if(iterations === 0 && searchResult.length !== 0){
-            let movies :Movie[] = [];
             let i = 0;
             while(i <= searchResult.length){
                 const id :string = searchResult[i];
                 const link = defaultLink
                     + apiKey
-                    + "&i="+id;
+                    + "&i="+id
+                    + "&plot=full";
 
-                console.log(id) ;
                 const movieReq = new Request(
                     link,
                     {method: 'GET'});
@@ -108,71 +81,62 @@ export function MovieList(props :any) {
                     .then(response => {
                         return response.json();
                     }).then((data: any) => {
-                    let result :any = data;
-                    const movie :Movie = {
-                        poster: result.Poster,
-                        title: result.Title,
-                        genre: result.Genre,
-                        rating: result.imdbRating,
-                        runtime: result.Runtime,
-                        rated: result.Rated,
-                        year: result.Year,
-                        boxOffice: result.BoxOffice
-                    };
-                    movies.push(movie);
-
-                    setMovieList( prev => prev.concat(movie));
+                        let result :any = data;
+                        const movie :Movie = {
+                            poster: result.Poster,
+                            title: result.Title,
+                            genre: result.Genre,
+                            rating: result.imdbRating,
+                            runtime: result.Runtime,
+                            rated: result.Rated,
+                            year: result.Year,
+                            boxOffice: result.BoxOffice,
+                            plot: result.Plot,
+                        };
+                        setMovieList( prev => prev.concat(movie));
                 });
 
                 i++;
             }
         }
-    }, [searchResult]);
+    }, [searchResult, iterations]);
 
+    //when there is movie's to display, change loaded to true
     useEffect(() => {
-        setIsLoaded(true)
-
+        if(movieList.length !== 0){
+            setIsLoaded(true);
+        }
     }, [movieList]);
+
+    //When clicking one of the table headers, change sorting for the table
+    function updateSorting(e :any){
+        const newSort :number = e.target.id;
+        if(newSort === sortId){
+            setSortId(-newSort);
+        }else{
+            setSortId(e.target.id);
+        }
+    }
 
     let list: any;
     if (isLoaded) {
-        const table :any = movieList.map( (movie :Movie) => {
-            return (
-                <tr>
-                    <td><img src={movie.poster} alt={"no poster"}/></td>
-                    <td>{movie.title}</td>
-                    <td>{movie.genre}</td>
-                    <td>{movie.rating}</td>
-                    <td>{movie.runtime}</td>
-                    <td>{movie.rated}</td>
-                    <td>{movie.year}</td>
-                    <td>{movie.boxOffice}</td>
-                </tr>
-            );
-        });
+        const tempMovies :any = sortMovieTable(movieList, sortId);
 
+        list = <MovieTable movies={tempMovies} updateSorting={updateSorting}/>
+
+    } else if(!isLoaded && searchResult.length > 0){
         list = (
-            <div id={"movieList"}>
-                <table>
-                    <thead>
-                    <tr>
-                        <td>Poster</td><td>Title</td><td>Genre</td><td>Rating</td>
-                        <td>Runtime</td><td>Rated</td><td>Year</td><td>BoxOffice</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {table}
-                    </tbody>
-                </table>
-            </div>
+            <p>Loading.....</p>
         );
-    } else {
+    }else{
         list = (
-            <div id={"movieList"}>
-                <p>Loading.....</p>
-            </div>
+                <p>Search for a movie</p>
         );
     }
 
-    return list;
+    return (
+        <div id={"movieList"}>
+            {list}
+        </div>
+    );
 }

@@ -13,12 +13,6 @@ const defaultFilter :Filter = {
 const defaultSearch :string = "";
 
 export function MovieLookup(){
-    // let search : string = "batman"; //"http://www.omdbapi.com/?apikey=88fcaf73&s=Alien&r=json";
-    // let filter : Filter = {
-    //     type: "movie",
-    //     year: "",
-    //     listLength: 20
-    // };
     const [filter, setFilter] = useState(defaultFilter);
     const [search, setSearch] = useState(defaultSearch);
 

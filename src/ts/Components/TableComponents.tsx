@@ -1,8 +1,8 @@
 import React from 'react';
 import {Movie} from "../Interface/MovieInterface";
 
-export function createMovieTable(props :any){
-    const table :any = props.items.map( (movie :Movie) => {
+export function MovieTable(props :any){
+    const table :any = props.movies.map( (movie :Movie) => {
         return (
             <tr>
                 <td><img src={movie.poster} alt={"no poster"}/></td>
@@ -18,18 +18,22 @@ export function createMovieTable(props :any){
     });
 
     return(
-        <div id={"movieList"}>
-            <table>
-                <thead>
+        <table>
+            <thead>
                 <tr>
-                    <td>Poster</td><td>Title</td><td>Genre</td><td>Rating</td>
-                    <td>Runtime</td><td>Rated</td><td>Year</td><td>BoxOffice</td>
+                    <td></td>
+                    <td id={"1"} onClick={props.updateSorting}>Title</td>
+                    <td id={"2"} onClick={props.updateSorting}>Genre</td>
+                    <td id={"3"} onClick={props.updateSorting}>Rating</td>
+                    <td id={"4"} onClick={props.updateSorting}>Runtime</td>
+                    <td id={"5"} onClick={props.updateSorting}>Rated</td>
+                    <td id={"6"} onClick={props.updateSorting}>Year</td>
+                    <td id={"7"} onClick={props.updateSorting}>BoxOffice</td>
                 </tr>
-                </thead>
-                <tbody>
-                    {table}
-                </tbody>
-            </table>
-        </div>
+            </thead>
+            <tbody>
+                {table}
+            </tbody>
+        </table>
     );
 }

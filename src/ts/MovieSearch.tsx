@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
-const searchRegex : string = "[A-ZØÆÅa-zøæå]";
 export function MovieSearch(props :any){
-    const [search, setSearch] = useState("");
+    //TODO - set initial state to ""
+    const [search, setSearch] = useState("batman");
 
     function handleSearchChange(e :any){
         setSearch(e.target.value);
@@ -17,7 +17,7 @@ export function MovieSearch(props :any){
     return (
       <div id={"movieSearch"}>
           <h1>Search</h1>
-          <input type={"text"} pattern={searchRegex} onChange={handleSearchChange}/>
+          <input type={"text"} onChange={handleSearchChange}/>
           <button name={"search"} onClick={handleSearchSubmit}>search</button>
       </div>
     );
