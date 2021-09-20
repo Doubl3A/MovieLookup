@@ -38,7 +38,7 @@ export function InputYear(props :any){
 export function InputListLength(props :any){
     return(
         <div>
-            <p>Show: </p>
+            <p>Search results: </p>
             <input type="radio" id="listLength20" name="inputShow" value="20" onChange={props.onChange} />
             <label htmlFor="listLength20">20</label>
 

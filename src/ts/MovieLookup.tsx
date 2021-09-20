@@ -4,6 +4,7 @@ import { MovieSearch } from './MovieSearch';
 import { MovieList } from './MovieList';
 import { MovieFilter } from './MovieFilter';
 import { Filter } from "./Interface/FilterInterface";
+import "../css/MovieLookup.css";
 
 const defaultFilter :Filter = {
     type: "",
@@ -18,18 +19,16 @@ export function MovieLookup(){
 
     function updateFilter(filter :Filter){
         setFilter(filter);
-        console.log(filter);
     }
 
     function updateSearch(search :string){
         setSearch(search);
-        console.log(search);
     }
 
     return(
-        <div id={"MovieLookup"}>
-            <MovieFilter updateFilter={updateFilter}/>
+        <div id={"MovieLookup"} className={"movieLookup"}>
             <MovieSearch updateSearch={updateSearch}/>
+            <MovieFilter updateFilter={updateFilter}/>
             <MovieList search={search} filter={filter}/>
         </div>
     );

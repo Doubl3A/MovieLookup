@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 
 export function MovieSearch(props :any){
-    //TODO - set initial state to ""
-    const [search, setSearch] = useState("batman");
+    const [search, setSearch] = useState("");
 
     function handleSearchChange(e :any){
         setSearch(e.target.value);
@@ -15,10 +14,12 @@ export function MovieSearch(props :any){
     }
 
     return (
-      <div id={"movieSearch"}>
-          <h1>Search</h1>
-          <input type={"text"} onChange={handleSearchChange}/>
-          <button name={"search"} onClick={handleSearchSubmit}>search</button>
+      <div id={"movieSearch"} className={"search"}>
+          <h1 className={"inputH1"}>Search</h1>
+          <div className={"searchInputDiv"}>
+              <input type={"text"} onChange={handleSearchChange} className={"searchInput"}/>
+              <button name={"search"} onClick={handleSearchSubmit}>search</button>
+          </div>
       </div>
     );
 }

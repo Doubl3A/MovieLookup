@@ -1,0 +1,39 @@
+.filter{
+    width: 50%;
+    padding-top: 1%;
+    padding-bottom: 5%;
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+.filterSubmit{
+    padding-top: 1%;
+}
+
+#filterInput{
+    align-items: center;
+}
+
+#filterHeader:hover{
+    color: #e80c0c;
+}
+
+
+.search{
+    width: 50%;
+    margin: 0 auto;
+}
+
+.searchInputDiv{
+    display: flex;
+    justify-content: center;
+}
+
+.searchInput{
+    width: 30%;
+}
+
+.inputH1{
+    text-align: center;
+}

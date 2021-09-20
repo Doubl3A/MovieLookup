@@ -1,5 +1,5 @@
 import {Filter} from "../Interface/FilterInterface";
-import {Movie, MovieID} from "../Interface/MovieInterface";
+import {Movie} from "../Interface/MovieInterface";
 
 const apiKey :string = "88fcaf73";
 const defaultLink :string = "http://www.omdbapi.com/?apikey=";
@@ -62,12 +62,13 @@ export function getMovieDetails(movieIDs :string[], setMovieList :any){
             }).then((data: any) => {
             let result :any = data;
             const movie :Movie = {
+                imdbId: movieID,
                 poster: result.Poster,
                 title: result.Title,
                 genre: result.Genre,
                 rating: result.imdbRating,
                 runtime: result.Runtime,
-                rated: result.Rated,
+                language: result.Language,
                 year: result.Year,
                 boxOffice: result.BoxOffice,
                 plot: result.Plot,

@@ -1,14 +1,15 @@
 import {Movie} from "../Interface/MovieInterface";
-import React from "react";
 
 export function sortMovieTable(movies :Movie[], sortId :number){
-
-    //taking sortId -1 because id start at 1, but array starts at 0
-    if(sortId < 0){
-        movies.sort(sortingFunctions[Math.abs(sortId) - 1]);
-        movies.reverse();
-    }else{
-        movies.sort(sortingFunctions[sortId -1]);
+    let id :number = sortId;
+    if(id !== 0){
+        //taking sortId -1 because id start at 1, but array starts at 0
+        if(id < 0){
+            movies.sort(sortingFunctions[Math.abs(id) - 1]);
+            movies.reverse();
+        }else{
+            movies.sort(sortingFunctions[id -1]);
+        }
     }
 
     return movies;
@@ -39,9 +40,9 @@ const sortRating = (a :Movie, b :Movie) => {
         if(aR === bR){
             return 0;
         }else if(aR < bR){
-            return 1;
-        }else{
             return -1;
+        }else{
+            return 1;
         }
     }
 
@@ -66,10 +67,10 @@ const sortRuntime = (a :Movie, b :Movie) => {
     return valid
 };
 
-const sortRated = (a :Movie, b :Movie) => {
-    let valid :number = validMovieType(a, b, a.rated, b.rated);
+const sortLanguage = (a :Movie, b :Movie) => {
+    let valid :number = validMovieType(a, b, a.language, b.language);
     if(valid === 0){
-        return a.rated.localeCompare(b.rated);
+        return a.language.localeCompare(b.language);
     }
     return valid;
 };
@@ -105,7 +106,7 @@ const sortingFunctions = [
     sortGenre,
     sortRating,
     sortRuntime,
-    sortRated,
+    sortLanguage,
     sortYear,
     sortBoxOffice
 ];

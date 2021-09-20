@@ -1,0 +1,41 @@
+.movieTable{
+    width: 90%;
+    margin: 0 auto;
+
+    position: relative;
+}
+
+table{
+    border-collapse: collapse;
+
+    text-align: center;
+    vertical-align: center;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #ece6e6;
+}
+
+thead{
+    background-color: #e80c0c;
+}
+
+td{
+
+}
+
+.poster{
+    size: portrait;
+    height: 90%;
+    width: 90%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.tempInfo{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

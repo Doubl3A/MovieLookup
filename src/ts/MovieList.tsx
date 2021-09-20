@@ -6,11 +6,14 @@ import {getMovieDetails, searchForMovies} from "./Components/SearchComponent";
 
 const defaultMovieID :string[]= [];
 const defaultMovies :Movie[] = [];
+const defaultSortId :number = 0;
 
 export function MovieList(props :any) {
     const [searchResult, setSearchResult] = useState(defaultMovieID);
     const [movieList, setMovieList] = useState(defaultMovies);
-    const [sortId, setSortId] = useState(1);
+
+    const [sortId, setSortId] = useState(defaultSortId);
+    const [showPlot, setShowPlot] = useState("");
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [iterations, setIterations] = useState(0);
@@ -25,11 +28,10 @@ export function MovieList(props :any) {
             setIsLoaded(false);
             setSearchResult([]);
             setMovieList([]);
-            setSortId(1);
+            setSortId(0);
 
             searchForMovies(props.search, props.filter, setSearchResult, setIterations);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.search, props.filter]);
 
     // Gets movie info for each movie
@@ -48,6 +50,9 @@ export function MovieList(props :any) {
 
     // When clicking one of the table headers, change sorting for the table
     function updateSorting(e :any){
+        //removing plot if its shown
+        setShowPlot("");
+
         const newSort :number = e.target.id;
         if(newSort === sortId){
             setSortId(-newSort);
@@ -56,22 +61,26 @@ export function MovieList(props :any) {
         }
     }
 
+    function onMovieClick(e :any){
+        console.log(e.target);
+    }
+
     let list: any;
     if (isLoaded) {
         const tempMovies :any = sortMovieTable(movieList, sortId);
 
-        list = <MovieTable movies={tempMovies} updateSorting={updateSorting}/>
+        list = <MovieTable movies={tempMovies}
+                           plotId={showPlot}
+                           updateSorting={updateSorting}
+                           onMovieClick={onMovieClick}/>
 
     } else if(!isLoaded && searchResult.length > 0){
-        list = <p>Loading.....</p>
-
-    }else{
-        list = <p>Search for a movie</p>
+        list = <p className={"tempInfo"}>Loading.....</p>
 
     }
 
     return (
-        <div id={"movieList"}>
+        <div id={"movieList"} className={"movieTable"}>
             {list}
         </div>
     );

@@ -1,11 +1,12 @@
 import React from 'react';
 import { MovieLookup } from './MovieLookup';
+import "../css/MovieLookup.css";
 
 function App() {
   return (
-    <div id={"app"}>
-      <MovieLookup />
-    </div>
+      <div>
+        <MovieLookup />
+      </div>
   );
 }
 

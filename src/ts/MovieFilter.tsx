@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {InputType, InputYear, InputListLength} from "./Components/InputComponents";
+import "../css/input.css";
 
 export function MovieFilter(props :any){
     const [type, setType] = useState("");
@@ -40,8 +41,8 @@ export function MovieFilter(props :any){
     }
 
     // hiding/unhiding filter on click
-    function hideFilter(e :any){
-        console.log(e.target.id);
+    function toggleFilter(e :any){
+        e.preventDefault();
         setHidden(!hidden);
     }
 
@@ -50,17 +51,24 @@ export function MovieFilter(props :any){
     if(!hidden){
         filter = (
             <div id={"filterInput"}>
-                <InputType onChange={handleTypeChange}/>
-                <InputYear onChange={handleYearChange}/>
-                <InputListLength onChange={handleListLengthChange}/>
-                <button name={"use filters"} onClick={handleFilterSubmit}>use</button>
+                <div className={"filterInputs"}>
+                    <InputType onChange={handleTypeChange}/>
+                    <InputYear onChange={handleYearChange}/>
+                    <InputListLength onChange={handleListLengthChange}/>
+                </div>
+                <div className={"filterSubmit"}>
+                    <button onClick={handleFilterSubmit} >
+                        use
+                    </button>
+                </div>
             </div>
         );
     }
 
    return (
-       <div id={"movieFilter"}>
-           <h1 onClick={hideFilter}>Filter</h1>
+       <div id={"movieFilter"} className={"filter"}>
+           {/*<h1 id={"filterHeader"} onClick={hideFilter} className={"inputH1"}>Filter</h1>*/}
+           <button name={"filter"} onClick={toggleFilter}>filter</button>
            {filter}
        </div>
    );
