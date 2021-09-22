@@ -7,7 +7,7 @@ const defaultLink :string = "http://www.omdbapi.com/?apikey=";
 // retrieves movieIDs from given search and filters
 // using setSearchResult to save results
 // using setIterations to keep track how many iterations have been tracked
-export function searchForMovies(search :string, filter :Filter, setSearchResult :any, setIterations :any){
+export function searchForMovies(search :string, filter :Filter, setSearchResult :any, setIterations :any, setError :any){
     let allowedIterations :number = filter.listLength/10;
 
     let i = 1;
@@ -35,6 +35,8 @@ export function searchForMovies(search :string, filter :Filter, setSearchResult 
                     });
 
                     setSearchResult( (prev :any) => prev.concat(movies));
+                }else if(data.Error !== "Movie not found!"){
+                    setError(data.Error);
                 }
 
                 setIterations((prev :any) => prev - 1);

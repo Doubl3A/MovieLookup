@@ -1,3 +1,4 @@
+/* Filter styles */
 .filter{
     width: 50%;
     padding-top: 1%;
@@ -7,18 +8,31 @@
     text-align: center;
 }
 
+.filter input[type=text]{
+    font-size: medium;
+}
+
+.filter label{
+    font-size: x-large;
+}
+
+.filter p{
+    font-size: xx-large;
+}
+
 .filterSubmit{
     padding-top: 1%;
+}
+
+.filterButton{
+    font-size: large;
 }
 
 #filterInput{
     align-items: center;
 }
 
-#filterHeader:hover{
-    color: #e80c0c;
-}
-
+/* Search styles */
 
 .search{
     width: 50%;
@@ -31,9 +45,16 @@
 }
 
 .searchInput{
-    width: 30%;
+    font-size: large;
+
+    width: 40%;
+}
+
+.searchButton{
+    font-size: large;
 }
 
 .inputH1{
     text-align: center;
+    font-size: xxx-large;
 }

@@ -57,9 +57,7 @@ export function MovieFilter(props :any){
                     <InputListLength onChange={handleListLengthChange}/>
                 </div>
                 <div className={"filterSubmit"}>
-                    <button onClick={handleFilterSubmit} >
-                        use
-                    </button>
+                    <button onClick={handleFilterSubmit} className={"filterButton"}>use</button>
                 </div>
             </div>
         );
@@ -67,8 +65,7 @@ export function MovieFilter(props :any){
 
    return (
        <div id={"movieFilter"} className={"filter"}>
-           {/*<h1 id={"filterHeader"} onClick={hideFilter} className={"inputH1"}>Filter</h1>*/}
-           <button name={"filter"} onClick={toggleFilter}>filter</button>
+           <button onClick={toggleFilter} className={"filterButton"}>Filter</button>
            {filter}
        </div>
    );

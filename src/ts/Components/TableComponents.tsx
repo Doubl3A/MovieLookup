@@ -1,39 +1,58 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Movie} from "../Interface/MovieInterface";
 import "../../css/tableCss.css";
 
-export function MovieTable(props :any){
-    const table :any = props.movies.map( (movie :Movie) => {
+export function CreateMovieTable(props: any) {
+    const [showPlot, setShowPlot] = useState("");
+
+    function onMovieClick(key: string) {
+        key === showPlot ? setShowPlot("") : setShowPlot(key);
+        console.log(showPlot);
+    }
+
+    const table: any = props.movies.map((movie: Movie) => {
         return (
-            <tr key={movie.imdbId} onClick={props.onMovieClick}>
-                <td><img src={movie.poster} alt={"no poster"} className={"poster"}/></td>
-                <td>{movie.title}</td>
-                <td>{movie.genre}</td>
-                <td>{movie.rating}</td>
-                <td>{movie.runtime}</td>
-                <td>{movie.language}</td>
-                <td>{movie.year}</td>
-                <td>{movie.boxOffice}</td>
-            </tr>
+            <React.Fragment key={movie.imdbId}>
+                <tr key={movie.imdbId} onClick={() => onMovieClick(movie.imdbId)}>
+                    <td><img src={movie.poster} alt={"no poster"} className={"poster"}/></td>
+                    <td><p>{movie.title}</p></td>
+                    <td><p>{movie.genre}</p></td>
+                    <td><p>{movie.rating}</p></td>
+                    <td><p>{movie.runtime}</p></td>
+                    <td><p>{movie.language}</p></td>
+                    <td><p>{movie.year}</p></td>
+                    <td><p>{movie.boxOffice}</p></td>
+                </tr>
+                {movie.imdbId === showPlot ?
+                    (<tr>
+                        <td colSpan={100}>
+                            <p className={"pPlot"}>{movie.plot}</p>
+                            <img src={movie.poster} alt={"no poster"} className={"plot"}/>
+                        </td>
+                    </tr>)
+                    : null
+                }
+            </React.Fragment>
+
         );
     });
 
-    return(
+    return (
         <table>
             <thead>
-                <tr>
-                    <td>{/*empty*/}</td>
-                    <td id={"1"} onClick={props.updateSorting}>Title</td>
-                    <td id={"2"} onClick={props.updateSorting}>Genre</td>
-                    <td id={"3"} onClick={props.updateSorting}>Rating</td>
-                    <td id={"4"} onClick={props.updateSorting}>Runtime</td>
-                    <td id={"5"} onClick={props.updateSorting}>Language</td>
-                    <td id={"6"} onClick={props.updateSorting}>Year</td>
-                    <td id={"7"} onClick={props.updateSorting}>BoxOffice</td>
-                </tr>
+            <tr onClick={props.updateSorting}>
+                <td>{/*empty*/}</td>
+                <td id={"1"}>Title</td>
+                <td id={"2"}>Genre</td>
+                <td id={"3"}>Rating</td>
+                <td id={"4"}>Runtime</td>
+                <td id={"5"}>Language</td>
+                <td id={"6"}>Year</td>
+                <td id={"7"}>BoxOffice</td>
+            </tr>
             </thead>
             <tbody>
-                {table}
+            {table}
             </tbody>
         </table>
     );

@@ -18,7 +18,7 @@ export function MovieSearch(props :any){
           <h1 className={"inputH1"}>Search</h1>
           <div className={"searchInputDiv"}>
               <input type={"text"} onChange={handleSearchChange} className={"searchInput"}/>
-              <button name={"search"} onClick={handleSearchSubmit}>search</button>
+              <button onClick={handleSearchSubmit} className={"searchButton"}>Search</button>
           </div>
       </div>
     );

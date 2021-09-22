@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './ts/App';
+import {MovieLookup} from "./ts/MovieLookup";
 
 ReactDOM.render(
-  <App />
+  <MovieLookup />
   ,
   document.getElementById('app')
 );

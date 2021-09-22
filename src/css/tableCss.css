@@ -1,8 +1,7 @@
 .movieTable{
-    width: 90%;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
 
-    position: relative;
 }
 
 table{
@@ -10,6 +9,9 @@ table{
 
     text-align: center;
     vertical-align: center;
+}
+td{
+    padding-right: 1%;
 }
 
 tbody tr:nth-child(odd) {
@@ -20,22 +22,30 @@ thead{
     background-color: #e80c0c;
 }
 
-td{
-
+table p{
+    font-family: Lucida Console, serif;
+    font-size: large;
 }
+
+
+.pPlot {
+    font-size: larger;
+    width: 90%;
+
+    margin: 0 auto;
+    padding-bottom: 1%;
+}
+
 
 .poster{
     size: portrait;
-    height: 90%;
-    width: 90%;
+    height: 200px;
+    width: 150px;
 
     display: flex;
     justify-content: center;
 }
 
 .tempInfo{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    text-align: center;
 }

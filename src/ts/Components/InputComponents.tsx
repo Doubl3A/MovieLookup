@@ -21,18 +21,16 @@ export function InputType(props :any){
         </div>
     );
 }
+
 //txt input for year
 export function InputYear(props :any){
-    let yearRegex = "^/d{4}$";
-
     return(
       <div>
           <p>Year: </p>
-          <input type={"text"} pattern={yearRegex} onChange={props.onChange}/>
+          <input type={"text"} onChange={props.onChange}/>
       </div>
     );
 }
-
 
 //dropdown list for element amount i table (20-60)
 export function InputListLength(props :any){
