@@ -1,5 +1,7 @@
 body{
     background-image: url("./img/popcorn_backgroundjpg.jpg");
+
+    padding-bottom: 10%;
 }
 
 #app{

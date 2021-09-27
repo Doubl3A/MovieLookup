@@ -22,6 +22,10 @@ thead{
     background-color: #e80c0c;
 }
 
+thead td{
+   cursor: pointer;
+}
+
 table p{
     font-family: Lucida Console, serif;
     font-size: large;

@@ -1,16 +1,14 @@
 import {Movie} from "../Interface/MovieInterface";
 
 export function sortMovieTable(movies :Movie[], sortId :number){
-    let id :number = sortId;
-    if(id !== 0){
-        //taking sortId -1 because id start at 1, but array starts at 0
-        if(id < 0){
-            movies.sort(sortingFunctions[Math.abs(id) - 1]);
-            movies.reverse();
-        }else{
-            movies.sort(sortingFunctions[id -1]);
-        }
+    //taking sortId -1 because id start at 1, but array starts at 0
+    if(sortId < 0){
+        movies.sort(sortingFunctions[Math.abs(sortId) - 1]);
+        movies.reverse();
+    }else{
+        movies.sort(sortingFunctions[sortId -1]);
     }
+
 
     return movies;
 }

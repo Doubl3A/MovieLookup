@@ -6,7 +6,7 @@ import {getMovieDetails, searchForMovies} from "./Components/SearchComponent";
 
 const defaultMovieID: string[] = [];
 const defaultMovies: Movie[] = [];
-const defaultSortId: number = 0;
+const defaultSortId: number = 1;
 
 export function MovieList(props: any) {
     const [searchResult, setSearchResult] = useState(defaultMovieID);
@@ -27,8 +27,8 @@ export function MovieList(props: any) {
 
             setIsLoaded(false);
             setSearchResult([]);
-            setMovieList([]);
-            setSortId(0);
+            setMovieList(defaultMovies);
+            setSortId(defaultSortId);
             setError("");
 
             searchForMovies(props.search, props.filter, setSearchResult, setIterations, setError);
@@ -66,6 +66,7 @@ export function MovieList(props: any) {
         list = <h2 className={"tempInfo"}>{error}</h2>
 
     } else if (isLoaded) {
+        console.log(movieList);
         const tempMovies: any = sortMovieTable(movieList, sortId);
 
         list = <CreateMovieTable movies={tempMovies} updateSorting={updateSorting}/>

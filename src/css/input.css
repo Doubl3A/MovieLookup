@@ -26,6 +26,8 @@
 
 .filterButton{
     font-size: large;
+
+    cursor: pointer;
 }
 
 #filterInput{
@@ -52,6 +54,7 @@
 
 .searchButton{
     font-size: large;
+    cursor: pointer;
 }
 
 .inputH1{
