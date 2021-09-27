@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Movie} from "./Interface/MovieInterface";
-import {sortMovieTable} from "./Components/SortingComponents";
-import {CreateMovieTable} from "./Components/TableComponents";
-import {getMovieDetails, searchForMovies} from "./Components/SearchComponent";
+import SortMovieTable from "./Components/SortingComponents";
+import CreateMovieTable from "./Components/TableComponents";
+import {searchForMovies, getMovieDetails} from "./Components/SearchComponent";
 
 const defaultMovieID: string[] = [];
 const defaultMovies: Movie[] = [];
 const defaultSortId: number = 1;
 
-export function MovieList(props: any) {
+const MovieList = (props: any) =>{
     const [searchResult, setSearchResult] = useState(defaultMovieID);
     const [movieList, setMovieList] = useState(defaultMovies);
 
@@ -67,7 +67,7 @@ export function MovieList(props: any) {
 
     } else if (isLoaded) {
         console.log(movieList);
-        const tempMovies: any = sortMovieTable(movieList, sortId);
+        const tempMovies: any = SortMovieTable(movieList, sortId);
 
         list = <CreateMovieTable movies={tempMovies} updateSorting={updateSorting}/>
     } else if (!isLoaded && searchResult.length > 0) {
@@ -81,3 +81,5 @@ export function MovieList(props: any) {
         </div>
     );
 }
+
+export default MovieList;

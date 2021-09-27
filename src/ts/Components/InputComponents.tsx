@@ -2,7 +2,7 @@ import React from 'react';
 
 //Filter inputs
 //Radio for selecting movie, series, episodes
-export function InputType(props :any){
+const InputType = (props :any) =>{
 
     return(
         <div>
@@ -23,7 +23,7 @@ export function InputType(props :any){
 }
 
 //txt input for year
-export function InputYear(props :any){
+const InputYear = (props :any) =>{
     return(
       <div>
           <p>Year: </p>
@@ -33,7 +33,7 @@ export function InputYear(props :any){
 }
 
 //dropdown list for element amount i table (20-60)
-export function InputListLength(props :any){
+const InputListLength = (props :any) =>{
     return(
         <div>
             <p>Search results: </p>
@@ -48,3 +48,5 @@ export function InputListLength(props :any){
         </div>
     );
 }
+
+export {InputType, InputYear, InputListLength};

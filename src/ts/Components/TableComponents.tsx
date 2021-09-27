@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Movie} from "../Interface/MovieInterface";
 import "../../css/tableCss.css";
 
-export function CreateMovieTable(props: any) {
+const CreateMovieTable = (props: any) =>{
     const [showPlot, setShowPlot] = useState("");
 
     function onMovieClick(key: string) {
@@ -57,3 +57,5 @@ export function CreateMovieTable(props: any) {
         </table>
     );
 }
+
+export default CreateMovieTable;

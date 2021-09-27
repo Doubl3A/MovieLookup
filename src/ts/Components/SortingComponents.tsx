@@ -1,6 +1,6 @@
 import {Movie} from "../Interface/MovieInterface";
 
-export function sortMovieTable(movies :Movie[], sortId :number){
+const SortMovieTable = (movies :Movie[], sortId :number) =>{
     //taking sortId -1 because id start at 1, but array starts at 0
     if(sortId < 0){
         movies.sort(sortingFunctions[Math.abs(sortId) - 1]);
@@ -109,7 +109,7 @@ const sortingFunctions = [
     sortBoxOffice
 ];
 
-function validMovieType(a :Movie, b :Movie, aType :string , bType :string){
+const validMovieType = (a :Movie, b :Movie, aType :string , bType :string) =>{
     let valid = validInput(a,b);
     if(valid === 0){
         valid = nonNA(aType, bType);
@@ -121,7 +121,7 @@ function validMovieType(a :Movie, b :Movie, aType :string , bType :string){
 //returning 0 if non are
 //1 if a is undefined
 //-1 if b is undefined
-function validInput(a :any, b :any){
+const validInput = (a :any, b :any) =>{
     if(a === undefined || b === undefined){
         if(a === undefined){
             return -1
@@ -137,7 +137,7 @@ function validInput(a :any, b :any){
 //returning 0 if not
 //1 if a is "N/A"
 //-1 if b is "N/A"
-function nonNA(a :string, b :string){
+const nonNA = (a :string, b :string) =>{
     let valid :number = validInput(a, b);
     if(valid === 0){
         if( a === "N/A" || b === "N/A"){
@@ -151,3 +151,5 @@ function nonNA(a :string, b :string){
 
     return valid;
 }
+
+export default SortMovieTable;

@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
-import {InputType, InputYear, InputListLength} from "./Components/InputComponents";
-import "../css/input.css";
 
-export function MovieFilter(props :any){
+import "../css/input.css";
+import {InputListLength, InputType, InputYear} from "./Components/InputComponents";
+
+const MovieFilter = (props :any) =>{
     const [type, setType] = useState("");
     const [year, setYear] = useState("");
     const [listLength, setListLength] = useState(20);
     const [hidden, setHidden] = useState(true);
 
     // saving change in InputYear to type
-    function handleTypeChange(e :any){
+    const handleTypeChange = (e :any) =>{
         let input = e.target.value;
         if(input === "all"){
             input = "";
@@ -19,17 +20,17 @@ export function MovieFilter(props :any){
     }
 
     // saving change in InputYear to year
-    function handleYearChange(e :any){
+    const handleYearChange = (e :any) =>{
         setYear(e.target.value);
     }
 
     // saving change in InputListLength to listLength
-    function handleListLengthChange(e :any){
+    const handleListLengthChange = (e :any) =>{
         setListLength(Number(e.target.value));
     }
 
     // on submit send filter, using props.updateFilter()
-    function handleFilterSubmit(e :any){
+    const handleFilterSubmit = (e :any) =>{
         e.preventDefault();
         const filter = {
             type: type,
@@ -41,7 +42,7 @@ export function MovieFilter(props :any){
     }
 
     // hiding/unhiding filter on click
-    function toggleFilter(e :any){
+    const toggleFilter = (e :any) =>{
         e.preventDefault();
         setHidden(!hidden);
     }
@@ -70,3 +71,5 @@ export function MovieFilter(props :any){
        </div>
    );
 }
+
+export default MovieFilter;

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
-import { MovieSearch } from './MovieSearch';
-import { MovieList } from './MovieList';
-import { MovieFilter } from './MovieFilter';
+import MovieSearch from './MovieSearch';
+import MovieList from './MovieList';
+import MovieFilter from './MovieFilter';
 import { Filter } from "./Interface/FilterInterface";
 import "../css/MovieLookup.css";
 
@@ -13,7 +13,7 @@ const defaultFilter :Filter = {
 };
 const defaultSearch :string = "";
 
-export function MovieLookup(){
+const MovieLookup = () =>{
     const [filter, setFilter] = useState(defaultFilter);
     const [search, setSearch] = useState(defaultSearch);
 
@@ -33,5 +33,7 @@ export function MovieLookup(){
         </div>
     );
 }
+
+export default MovieLookup;
 
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-export function MovieSearch(props :any){
+const MovieSearch = (props :any) =>{
     const [search, setSearch] = useState("");
 
     function handleSearchChange(e :any){
@@ -23,3 +23,5 @@ export function MovieSearch(props :any){
       </div>
     );
 }
+
+export default MovieSearch;
