@@ -23,6 +23,7 @@ const MovieLookup = () =>{
 
     function updateSearch(search :string){
         setSearch(search);
+        setFilter(defaultFilter);
     }
 
     return(

@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 
 import "../css/input.css";
-import {InputListLength, InputType, InputYear} from "./Components/InputComponents";
+import RadioComponent from "./Components/RadioComponent";
+import TextInput from "./Components/TextInputComponent";
+
+const filterTypes :string[] = ["movie", "series", "episode", "all"];
+const filterListLength :number[] = [20, 40, 60];
 
 const MovieFilter = (props :any) =>{
     const [type, setType] = useState("");
@@ -53,9 +57,9 @@ const MovieFilter = (props :any) =>{
         filter = (
             <div id={"filterInput"}>
                 <div className={"filterInputs"}>
-                    <InputType onChange={handleTypeChange}/>
-                    <InputYear onChange={handleYearChange}/>
-                    <InputListLength onChange={handleListLengthChange}/>
+                    <RadioComponent items={filterTypes} header={"Search for:"} onChange={handleTypeChange} />
+                    <TextInput header={"Year: "} onChange={handleYearChange} />
+                    <RadioComponent items={filterListLength} header={"Search results:"} onChange={handleListLengthChange} />
                 </div>
                 <div className={"filterSubmit"}>
                     <button onClick={handleFilterSubmit} className={"filterButton"}>use</button>
