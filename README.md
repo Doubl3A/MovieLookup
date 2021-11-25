@@ -1,6 +1,6 @@
 Web aplication to search for movies using the [OMDb API](https://www.omdbapi.com/)
 
-Install nessecary packages before starting the application
+Install nessecary packages before starting the application with
 
 ### `npm install`
 
